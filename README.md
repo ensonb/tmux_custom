@@ -7,11 +7,11 @@ A comprehensive, one-command tmux customization script for Linux (Debian-based s
 ### 🎨 **Beautiful Interface**
 - **Powerline-style status bar** with system information
 - **256-color support** with proper terminal detection
-- **Custom color scheme** optimized for readability
+- **Gruvbox color theme** (set in `~/.tmux.conf.local`)
 - **Visual pane borders** with active pane highlighting
 
 ### ⌨️ **Ergonomic Key Bindings**
-- **Ctrl+a prefix** - More ergonomic than default Ctrl+b
+- **Ctrl+b prefix** - tmux default
 - **Intuitive splits** - `|` for vertical, `-` for horizontal
 - **Vim-style navigation** - h/j/k/l for pane movement
 - **Quick resize** - H/J/K/L for pane resizing
@@ -22,17 +22,15 @@ A comprehensive, one-command tmux customization script for Linux (Debian-based s
 - **Scroll through history** with mouse wheel
 - **Drag to resize** pane borders
 - **Select and copy** text with mouse
-- **Toggle on/off** with Ctrl+a m
+- **Toggle on/off** with Ctrl+b m
 
 ### 📋 **Clipboard Integration**
 - **Vi-style copy mode** - Familiar for Vim users
 - **System clipboard** integration via xclip
-- **Quick paste** - Ctrl+a p
+- **Quick paste** - Ctrl+b p
 - **Visual selection** - v to select, y to copy
 
 ### 🔌 **Powerful Plugins (via TPM)**
-- **tmux-resurrect** - Save and restore sessions
-- **tmux-continuum** - Auto-save sessions every 15 minutes
 - **tmux-yank** - Enhanced clipboard operations
 - **tmux-copycat** - Advanced regex search
 - **tmux-open** - Open files and URLs from tmux
@@ -69,59 +67,57 @@ chmod +x tmux_custom.sh
 ### Session Management
 | Key | Action |
 |-----|--------|
-| `Ctrl+a d` | Detach from session |
-| `Ctrl+a (` | Previous session |
-| `Ctrl+a )` | Next session |
-| `Ctrl+a s` | Session list |
+| `Ctrl+b d` | Detach from session |
+| `Ctrl+b (` | Previous session |
+| `Ctrl+b )` | Next session |
+| `Ctrl+b s` | Session list |
 
 ### Window Management
 | Key | Action |
 |-----|--------|
-| `Ctrl+a c` | New window |
-| `Ctrl+a n` | Next window |
-| `Ctrl+a p` | Previous window |
-| `Ctrl+a 0-9` | Switch to window number |
-| `Ctrl+a ,` | Rename window |
-| `Ctrl+a X` | Kill window |
-| `Ctrl+a w` | List windows |
+| `Ctrl+b c` | New window |
+| `Ctrl+b n` | Next window |
+| `Ctrl+b p` | Previous window |
+| `Ctrl+b 0-9` | Switch to window number |
+| `Ctrl+b ,` | Rename window |
+| `Ctrl+b X` | Kill window |
+| `Ctrl+b w` | List windows |
 
 ### Pane Management
 | Key | Action |
 |-----|--------|
-| `Ctrl+a \|` | Split vertically |
-| `Ctrl+a -` | Split horizontally |
-| `Ctrl+a h/j/k/l` | Navigate panes (vim) |
+| `Ctrl+b \|` | Split vertically |
+| `Ctrl+b -` | Split horizontally |
+| `Ctrl+b h/j/k/l` | Navigate panes (vim) |
 | `Alt+Arrow` | Navigate panes (no prefix) |
-| `Ctrl+a H/J/K/L` | Resize panes |
-| `Ctrl+a z` | Toggle pane zoom |
-| `Ctrl+a x` | Kill pane |
-| `Ctrl+a s` | Synchronize panes |
+| `Ctrl+b H/J/K/L` | Resize panes |
+| `Ctrl+b z` | Toggle pane zoom |
+| `Ctrl+b x` | Kill pane |
+| `Ctrl+b s` | Synchronize panes |
 
 ### Copy Mode (Vi-style)
 | Key | Action |
 |-----|--------|
-| `Ctrl+a Esc` | Enter copy mode |
+| `Ctrl+b Esc` | Enter copy mode |
 | `v` | Begin selection |
 | `y` | Copy to clipboard |
 | `r` | Rectangle toggle |
-| `Ctrl+a p` | Paste |
+| `Ctrl+b p` | Paste |
 | `q` | Exit copy mode |
 
 ### Plugins
 | Key | Action |
 |-----|--------|
-| `Ctrl+a I` | Install plugins |
-| `Ctrl+a U` | Update plugins |
-| `Ctrl+a Ctrl+s` | Save session (resurrect) |
-| `Ctrl+a Ctrl+r` | Restore session (resurrect) |
-| `Ctrl+a /` | Search (copycat) |
+| `Ctrl+b I` | Install plugins |
+| `Ctrl+b U` | Update plugins |
+| `Ctrl+b /` | Search (copycat) |
 
 ### Utilities
 | Key | Action |
 |-----|--------|
-| `Ctrl+a r` | Reload configuration |
-| `Ctrl+a m` | Toggle mouse mode |
-| `Ctrl+a ?` | Show all keybindings |
+| `Ctrl+b r` | Reload configuration |
+| `Ctrl+b m` | Toggle mouse mode |
+| `Ctrl+b ?` | Show all keybindings |
 
 ## 🖥️ System Requirements
 
@@ -184,10 +180,10 @@ vim ~/.tmux.conf.local
 ```bash
 # ~/.tmux.conf.local
 
-# Change prefix back to Ctrl+b
-unbind C-a
-set -g prefix C-b
-bind C-b send-prefix
+# Switch prefix to Ctrl+a
+unbind C-b
+set -g prefix C-a
+bind C-a send-prefix
 
 # Change status bar colors
 set -g status-style bg=colour234,fg=colour137
@@ -212,7 +208,7 @@ set -g mouse off
 ### Update Plugins
 ```bash
 # Inside tmux
-Ctrl+a U
+Ctrl+b U
 
 # Or from terminal
 ~/.tmux/plugins/tpm/scripts/update_plugins.sh
@@ -221,7 +217,7 @@ Ctrl+a U
 ### Reload Configuration
 ```bash
 # Inside tmux
-Ctrl+a r
+Ctrl+b r
 
 # Or from terminal
 tmux source-file ~/.tmux.conf
@@ -229,30 +225,26 @@ tmux source-file ~/.tmux.conf
 
 ## 💡 Tips & Tricks
 
-### Session Persistence
-Sessions automatically save every 15 minutes via tmux-continuum. Your work survives reboots!
-
-### Save/Restore Manually
-- **Save**: `Ctrl+a Ctrl+s`
-- **Restore**: `Ctrl+a Ctrl+r`
+### Session Persistence (optional)
+tmux-resurrect and tmux-continuum are off by default. To turn them on, uncomment their `@plugin` and settings lines in `~/.tmux.conf`, then press `Ctrl+b I`.
 
 ### Search in Copy Mode
-- **Regex search**: `Ctrl+a /`
-- **File search**: `Ctrl+a Ctrl+f`
-- **URL search**: `Ctrl+a Ctrl+u`
+- **Regex search**: `Ctrl+b /`
+- **File search**: `Ctrl+b Ctrl+f`
+- **URL search**: `Ctrl+b Ctrl+u`
 
 ### Working with Multiple Panes
-1. Split your window: `Ctrl+a |` and `Ctrl+a -`
-2. Navigate: `Alt+Arrow` or `Ctrl+a h/j/k/l`
-3. Resize: `Ctrl+a H/J/K/L`
-4. Zoom one pane: `Ctrl+a z`
+1. Split your window: `Ctrl+b |` and `Ctrl+b -`
+2. Navigate: `Alt+Arrow` or `Ctrl+b h/j/k/l`
+3. Resize: `Ctrl+b H/J/K/L`
+4. Zoom one pane: `Ctrl+b z`
 
 ### Synchronized Panes
 Run the same command in all panes:
 1. Split panes as needed
-2. Enable sync: `Ctrl+a s`
+2. Enable sync: `Ctrl+b s`
 3. Type your commands (appears in all panes)
-4. Disable sync: `Ctrl+a s`
+4. Disable sync: `Ctrl+b s`
 
 ## 🐛 Troubleshooting
 
@@ -272,7 +264,7 @@ export TERM=screen-256color
 # Most modern terminals support it by default
 
 # Toggle mouse mode
-Ctrl+a m
+Ctrl+b m
 ```
 
 ### Plugins not loading
@@ -282,7 +274,7 @@ cd ~/.tmux/plugins/tpm
 ./scripts/install_plugins.sh
 
 # Or inside tmux
-Ctrl+a I
+Ctrl+b I
 ```
 
 ### Clipboard not working

@@ -125,10 +125,10 @@ set -g set-clipboard on
 # KEY BINDINGS
 # ==============================================================================
 
-# Change prefix from Ctrl+b to Ctrl+a (more ergonomic)
-unbind C-b
-set -g prefix C-a
-bind C-a send-prefix
+# Prefix Ctrl+b (default)
+unbind C-a
+set -g prefix C-b
+bind C-b send-prefix
 
 # Reload configuration
 bind r source-file ~/.tmux.conf \; display "Configuration reloaded!"
@@ -246,18 +246,18 @@ set -g visual-activity off
 # List of plugins
 set -g @plugin 'tmux-plugins/tpm'
 set -g @plugin 'tmux-plugins/tmux-sensible'
-set -g @plugin 'tmux-plugins/tmux-resurrect'
-set -g @plugin 'tmux-plugins/tmux-continuum'
+# set -g @plugin 'tmux-plugins/tmux-resurrect'
+# set -g @plugin 'tmux-plugins/tmux-continuum'
 set -g @plugin 'tmux-plugins/tmux-yank'
 set -g @plugin 'tmux-plugins/tmux-copycat'
 set -g @plugin 'tmux-plugins/tmux-open'
 set -g @plugin 'tmux-plugins/tmux-cpu'
 
 # Plugin settings
-set -g @resurrect-strategy-vim 'session'
-set -g @resurrect-capture-pane-contents 'on'
-set -g @continuum-restore 'on'
-set -g @continuum-save-interval '15'
+# set -g @resurrect-strategy-vim 'session'
+# set -g @resurrect-capture-pane-contents 'on'
+# set -g @continuum-restore 'on'
+# set -g @continuum-save-interval '15'
 
 # CPU plugin in status bar
 set -g status-right "#{cpu_bg_color} CPU: #{cpu_percentage} | #{ram_bg_color} RAM: #{ram_percentage} #[fg=colour244]| %Y-%m-%d #[fg=colour39,bold]%H:%M #[fg=colour244]| #[fg=colour166]#h"
@@ -296,6 +296,39 @@ create_local_config() {
 # bind Space last-window
 
 # Your customizations below:
+
+# ===== Gruvbox status bar =====
+# Base
+set -g status-style bg=colour237,fg=colour223
+
+# Left: session name on yellow accent block (gruvbox NORMAL look)
+set -g status-left "#[fg=colour235,bg=colour214,bold] #S #[fg=colour214,bg=colour237,nobold] "
+set -g status-left-length 40
+
+# Right: CPU/RAM (fixed gruvbox bg, no dynamic color) + date/time/host
+set -g status-right "#[fg=colour223,bg=colour239] CPU #{cpu_percentage} #[fg=colour223,bg=colour239] RAM #{ram_percentage} #[fg=colour237,bg=colour237] #[fg=colour245,bg=colour237]%Y-%m-%d #[fg=colour214,bold]%H:%M #[fg=colour245,nobold]| #[fg=colour108]#h "
+set -g status-right-length 100
+
+# Windows
+setw -g window-status-style fg=colour245,bg=colour237
+setw -g window-status-current-style fg=colour235,bg=colour214,bold
+setw -g window-status-format " #I:#W "
+setw -g window-status-current-format "#[fg=colour237,bg=colour214]#[fg=colour235,bg=colour214,bold] #I:#W #[fg=colour214,bg=colour237,nobold]"
+
+# Pane borders
+set -g pane-border-style fg=colour239
+set -g pane-active-border-style fg=colour214
+
+# Messages / command prompt
+set -g message-style bg=colour237,fg=colour214
+set -g message-command-style bg=colour237,fg=colour214
+
+# Activity highlight
+setw -g window-status-activity-style fg=colour208,bg=colour237
+
+# Re-interpolate CPU/RAM placeholders (must run AFTER our status-right is set,
+# since tmux-cpu string-replaces the placeholders at load time)
+run-shell '~/.tmux/plugins/tmux-cpu/cpu.tmux'
 LOCALCONF
 
     print_status "Local customization file created at ~/.tmux.conf.local"
@@ -363,7 +396,7 @@ echo "======================================================================="
 echo "                    TMUX QUICK REFERENCE GUIDE"
 echo "======================================================================="
 echo ""
-echo "PREFIX KEY: Ctrl+a (changed from default Ctrl+b)"
+echo "PREFIX KEY: Ctrl+b (default)"
 echo ""
 echo "=== SESSION MANAGEMENT ==="
 echo "  tmux                    - Start new session"
@@ -372,41 +405,41 @@ echo "  tmux a                  - Attach to last session"
 echo "  tmux a -t <name>        - Attach to named session"
 echo "  tmux ls                 - List sessions"
 echo "  tmux kill-session -t <name> - Kill named session"
-echo "  Ctrl+a d                - Detach from session"
-echo "  Ctrl+a (                - Previous session"
-echo "  Ctrl+a )                - Next session"
-echo "  Ctrl+a s                - Show session list"
+echo "  Ctrl+b d                - Detach from session"
+echo "  Ctrl+b (                - Previous session"
+echo "  Ctrl+b )                - Next session"
+echo "  Ctrl+b s                - Show session list"
 echo ""
 echo "=== WINDOW MANAGEMENT ==="
-echo "  Ctrl+a c                - Create new window"
-echo "  Ctrl+a n                - Next window"
-echo "  Ctrl+a p                - Previous window"
-echo "  Ctrl+a 0-9              - Switch to window number"
-echo "  Ctrl+a ,                - Rename window"
-echo "  Ctrl+a X                - Kill window (no confirmation)"
-echo "  Ctrl+a f                - Find window"
-echo "  Ctrl+a w                - List windows"
+echo "  Ctrl+b c                - Create new window"
+echo "  Ctrl+b n                - Next window"
+echo "  Ctrl+b p                - Previous window"
+echo "  Ctrl+b 0-9              - Switch to window number"
+echo "  Ctrl+b ,                - Rename window"
+echo "  Ctrl+b X                - Kill window (no confirmation)"
+echo "  Ctrl+b f                - Find window"
+echo "  Ctrl+b w                - List windows"
 echo ""
 echo "=== PANE MANAGEMENT ==="
-echo "  Ctrl+a |                - Split vertically"
-echo "  Ctrl+a -                - Split horizontally"
-echo "  Ctrl+a h/j/k/l          - Navigate panes (vim style)"
+echo "  Ctrl+b |                - Split vertically"
+echo "  Ctrl+b -                - Split horizontally"
+echo "  Ctrl+b h/j/k/l          - Navigate panes (vim style)"
 echo "  Alt+Arrow               - Navigate panes (no prefix needed)"
-echo "  Ctrl+a H/J/K/L          - Resize panes"
-echo "  Ctrl+a z                - Toggle pane zoom"
-echo "  Ctrl+a x                - Kill pane (no confirmation)"
-echo "  Ctrl+a s                - Toggle synchronize panes"
+echo "  Ctrl+b H/J/K/L          - Resize panes"
+echo "  Ctrl+b z                - Toggle pane zoom"
+echo "  Ctrl+b x                - Kill pane (no confirmation)"
+echo "  Ctrl+b s                - Toggle synchronize panes"
 echo ""
 echo "=== COPY MODE (VI STYLE) ==="
-echo "  Ctrl+a Esc              - Enter copy mode"
+echo "  Ctrl+b Esc              - Enter copy mode"
 echo "  v                       - Begin selection"
 echo "  y                       - Copy selection (to clipboard)"
 echo "  r                       - Rectangle toggle"
-echo "  Ctrl+a p                - Paste"
+echo "  Ctrl+b p                - Paste"
 echo "  q                       - Exit copy mode"
 echo ""
 echo "=== MOUSE MODE ==="
-echo "  Ctrl+a m                - Toggle mouse mode"
+echo "  Ctrl+b m                - Toggle mouse mode"
 echo "  Mouse Features:"
 echo "    • Click to switch panes/windows"
 echo "    • Scroll to navigate history"
@@ -414,21 +447,17 @@ echo "    • Drag borders to resize panes"
 echo "    • Select text to copy"
 echo ""
 echo "=== PLUGINS & FEATURES ==="
-echo "  Ctrl+a I                - Install plugins"
-echo "  Ctrl+a U                - Update plugins"
-echo "  Ctrl+a alt+u            - Uninstall plugins"
-echo ""
-echo "  tmux-resurrect:"
-echo "    Ctrl+a Ctrl+s         - Save session"
-echo "    Ctrl+a Ctrl+r         - Restore session"
+echo "  Ctrl+b I                - Install plugins"
+echo "  Ctrl+b U                - Update plugins"
+echo "  Ctrl+b alt+u            - Uninstall plugins"
 echo ""
 echo "  tmux-copycat:"
-echo "    Ctrl+a /              - Search"
-echo "    Ctrl+a Ctrl+f         - File search"
-echo "    Ctrl+a Ctrl+u         - URL search"
+echo "    Ctrl+b /              - Search"
+echo "    Ctrl+b Ctrl+f         - File search"
+echo "    Ctrl+b Ctrl+u         - URL search"
 echo ""
 echo "=== CONFIGURATION ==="
-echo "  Ctrl+a r                - Reload configuration"
+echo "  Ctrl+b r                - Reload configuration"
 echo "  vim ~/.tmux.conf        - Edit main config"
 echo "  vim ~/.tmux.conf.local  - Edit local config"
 echo ""
@@ -489,7 +518,7 @@ main() {
     echo "  • Install tmux and all dependencies"
     echo "  • Install Tmux Plugin Manager (TPM)"
     echo "  • Create fully customized tmux configuration"
-    echo "  • Setup useful plugins (resurrect, continuum, yank, etc.)"
+    echo "  • Setup useful plugins (yank, copycat, open, cpu)"
     echo "  • Configure clipboard integration"
     echo "  • Add helpful aliases and reference guide"
     echo ""
@@ -527,12 +556,12 @@ main() {
     print_header "======================================================================="
     echo ""
     print_status "Tmux has been fully customized with:"
-    echo "  ✓ Custom key bindings (Ctrl+a prefix)"
+    echo "  ✓ Custom key bindings (default Ctrl+b prefix)"
+    echo "  ✓ Gruvbox color theme"
     echo "  ✓ Mouse support enabled"
     echo "  ✓ Vi-style copy mode"
     echo "  ✓ Beautiful status bar with system info"
     echo "  ✓ Plugin manager (TPM) installed"
-    echo "  ✓ Session persistence (resurrect/continuum)"
     echo "  ✓ Clipboard integration"
     echo "  ✓ Smart pane navigation"
     echo "  ✓ Useful aliases"
@@ -540,7 +569,7 @@ main() {
     print_info "Quick Start:"
     echo "  • Start tmux: tmux or t"
     echo "  • Show help: ~/tmux-reference.sh or tmux-help"
-    echo "  • Reload config: Ctrl+a r"
+    echo "  • Reload config: Ctrl+b r"
     echo ""
     print_warning "Important: Restart your shell or run 'source ~/.bashrc' (or ~/.zshrc)"
     print_warning "Then start tmux with: tmux"

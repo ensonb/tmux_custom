@@ -48,8 +48,10 @@ A comprehensive, one-command tmux customization script for Linux (Debian-based s
 
 ### One-Command Installation
 ```bash
-curl -fsSL https://raw.githubusercontent.com/ensonb/tmux_custom/main/tmux_custom.sh | bash
+bash <(curl -fsSL https://raw.githubusercontent.com/ensonb/tmux_custom/main/tmux_custom.sh)
 ```
+
+> **Note**: Use `bash <(curl ...)`, not `curl ... | bash`. The script asks for confirmation, and with a pipe that prompt reads the script itself instead of your keypress.
 
 ### Manual Installation
 ```bash
